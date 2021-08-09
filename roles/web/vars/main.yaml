@@ -1,0 +1,13 @@
+db:
+  mysql_sock: "/var/run/mysqld/mysqld.sock"
+  mysql_db_name: "wpdb"
+  mysql_user_name: "wpadm"
+  mysql_user_passwd: "qwer1234"
+web:
+  wp_url: "https://wordpress.org/wordpress-{{ wp_version }}.tar.gz"
+  wp_checksum: "https://wordpress.org/wordpress-{{ wp_version }}.tar.gz.sha1"
+  wp_tar: "/tmp/wordpress-{{ wp_version }}.tar.gz"
+  wp_config: "/var/www/html/wordpress/wp-config.php"
+wp_version: "5.8"
+port: 
+  service_port: "{{ service_port }}"

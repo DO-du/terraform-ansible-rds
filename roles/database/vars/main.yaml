@@ -1,0 +1,5 @@
+db:
+  mysql_sock: "/var/run/mysqld/mysqld.sock"
+  mysql_db_name: "wpdb"
+  mysql_user_name: "wpadm"
+  mysql_user_passwd: "qwer1234"

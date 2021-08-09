@@ -1,0 +1,39 @@
+- name: Download Wordpress Source
+  get_url:
+    url: "{{ web['wp_url'] }}"
+ #  checksum: "{{ web['wp_checksum'] }}"
+    dest: "{{ web['wp_tar'] }}"
+  async: 300
+  poll: 0
+  register: wp_download_result
+- name: Install Apache2 Package
+  apt:
+    name: apache2, php, php-mysql, php-gd, php-mbstring
+    state: present
+- name: Change Apache2 Service Ports
+  template:
+    src: ../templates/ports.conf.j2
+    dest: /etc/apache2/ports.conf
+  notify:
+    - Restart Apache2 services
+- name: Starting Apache2 Service
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+- name: Sync Download Wordpress
+  async_status:
+    jid: "{{ wp_download_result.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 100
+  delay: 5
+- name: Unarchive Wordpress Source
+  unarchive:
+    src: "{{ web['wp_tar'] }}"
+    remote_src: true
+    dest: /var/www/html
+- name: Setting Wordpress Database Configuration
+  template:
+    src: ../templates/wp-config.php.j2
+    dest: "{{ web['wp_config'] }}"

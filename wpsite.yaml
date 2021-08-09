@@ -1,0 +1,11 @@
+
+- name: Database
+  hosts: "{{ groups['ungrouped'][0] }}"
+  roles:
+    - database
+
+- name: Web
+  hosts: "{{ groups['ungrouped'][0] }}"
+  roles:
+    - web
+

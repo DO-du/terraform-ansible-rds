@@ -1,0 +1,32 @@
+- name: Install MariaDB Package
+  yum:
+    update_cache: true
+    name: mariadb-server, python3-pymysql
+    state: present
+- name: Starting Maria Service
+  service:
+    name: mariadb
+    state: started
+- name: Create Wordpress Database
+  mysql_db:
+    login_unix_socket: "{{ db['mysql_sock'] }}"
+    name: "{{ db['mysql_db_name'] }}"
+    state: present
+    enabled: yes
+- name: Create Wordpress User
+  mysql_user:
+    check_implicit_admin: yes
+    login_unix_socket: "{{ db['mysql_sock'] }}"
+    name: "{{ db['mysql_user_name'] }}"
+    password: "{{ db['mysql_user_passwd'] }}"
+    host: localhost              
+    priv: wpdb.*:ALL,GRANT
+    state: present
+- name: External Connection Setting
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: bind-address
+    line: bind-address=0.0.0.0
+  notify: Restart MariaDB services
+
+

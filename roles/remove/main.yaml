@@ -1,0 +1,56 @@
+- name: Wordpress Remove
+  hosts: 192.168.200.102
+  tasks:
+  - name: Stop Apache2 Service
+    service:
+      name: apache2
+      state: stopped
+    ignore_errors: true
+  - name: Remove Apache2 Package
+    apt:
+      name: apache2, php, php-mysql, php-gd, php-mbstring
+      state: absent
+      purge: yes
+  - name: Remove Dep-Apache2 Package
+    apt:
+      autoremove: yes
+      purge: yes
+  - name: Remove Apache Configuration
+    file:
+      path: /etc/apache2
+      state: absent
+  - name: Delete Wordpress Archive Files
+    file:
+      path: /tmp/wordpress-5.8.tar.gz
+      state: absent
+  - name: Delete Wordpress App
+    file:
+      path: /var/www/html
+      state: absent
+
+- name: MySQL Remove
+  hosts: 192.168.200.101
+  tasks:
+  - name: Stop MySQL Service
+    service:
+      name: mysql
+      state: stopped
+    ignore_errors: true
+  - name: Remove MySQL Package
+    apt:
+      name: mysql-server, python3-pymysql, mysql-common, mysql-client
+      state: absent
+      purge: yes
+  - name: Remove MySQL Configuration
+    file:
+      path: /etc/mysql
+      state: absent
+  - name: Remove Dep-MySQL Package
+    apt:
+      autoremove: yes
+      purge: yes
+  - name: Cleanup Databases
+    file:
+      path: /var/lib/mysql
+      state: absent
+

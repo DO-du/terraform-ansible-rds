@@ -1,0 +1,8 @@
+- name: Install Wordpress in Debian
+  import_tasks: wp_debian.yaml
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Install Wordpress in RedHat
+  import_tasks: wp_redhat.yaml
+  when: ansible_facts['os_family'] == "RedHat"
+
