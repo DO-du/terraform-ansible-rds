@@ -8,6 +8,7 @@
   register: wp_download_result
 - name: Install Apache2 Package
   apt:
+    update_cache: yes
     name: apache2, php, php-mysql, php-gd, php-mbstring
     state: present
 - name: Change Apache2 Service Ports
